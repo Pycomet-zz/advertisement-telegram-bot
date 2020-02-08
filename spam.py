@@ -8,6 +8,8 @@ from telethon import TelegramClient, events, sync
 import telebot
 from time import sleep
 from telethon.tl.functions.channels import JoinChannelRequest
+import random
+import csv
 
 # Defining the needed variables
 api_id = '683428'
@@ -15,6 +17,12 @@ api_hash = '967b28d111f82b906b6f28da1ff04411'
 customMsg = ''
 targetGrp = ''
 user = ''
+admins = [] # Administrators of the group
+
+# registered users
+Userfile = open("Users.txt", "r")
+idlist = list(csv.reader(Userfile))
+registeredusers = [n[0] for n in idlist]
 
 client = TelegramClient('session', api_id=api_id, api_hash=api_hash).start()
 
@@ -41,10 +49,14 @@ def joinGroup(msg):
     """Join The Target Group And Request Message From User"""
 
     global targetGrp
+    global admins
 
     try:
         targetGrp = msg.text
-        print(targetGrp)
+        
+        # Extracting Admin Information For the target group
+        [admins.append(admin.user.id) for admin in bot.get_chat_administrators(targetGrp)]
+        
 
         # Ask Request
         question = bot.send_message(user.id, "Paste your custom message content here --")
@@ -71,6 +83,7 @@ async def sendMessage(id):
 
     bot.send_message(id, "Sending Messages.....")
 
+
     try:
         group = await client.get_entity(targetGrp)
 
@@ -86,22 +99,29 @@ async def sendMessage(id):
 
             if user.bot == False:
 
-                try:
-                    await client.send_message(user.id, customMsg)
+                if user.id not in admins and str(user.id) not in registeredusers:
 
-                    bot.send_message(id, f"Sent to {user.username}")
-                except Exception as e:
-                    print(f"Warning ! {e}")
-                    sleep(60)
-                    pass
+                    try:
+                        await client.send_message(user.id, customMsg)
 
-                sleep(random.randrange(60,120))
+                        # Writing To Db File
+                        register = open("Users.txt", "a", newline="\n")
+                        register.write(f"{user.id}\n")
+                        register.close()
+
+                        bot.send_message(id, f"Sent to {user.username}")
+                    except Exception as e:
+                        print(f"Warning ! {e}")
+                        sleep(60)
+                        pass
+
+                    sleep(random.randrange(60,120))
 
     except Exception as e:
         print(e)
         bot.send_message(id, "Error in your input! Try again with requested valid data")
-    
-    # Exclude administrators
+
+   
 
 bot.polling(none_stop=True)
 
