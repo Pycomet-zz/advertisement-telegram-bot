@@ -19,13 +19,15 @@ targetGrp = ''
 user = ''
 admins = [] # Administrators of the group
 
-# registered users
+# registered users on Users.txt
 Userfile = open("Users.txt", "r")
 idlist = list(csv.reader(Userfile))
 registeredusers = [n[0] for n in idlist]
 
+# Starting client session
 client = TelegramClient('session', api_id=api_id, api_hash=api_hash).start()
 
+# Starting Bot
 bot = telebot.TeleBot(token='1094295882:AAEF0PwOQKL88K6L5zslnpxKxWCGnfd0s3Q')
 print("Ready")
 
@@ -90,7 +92,8 @@ async def sendMessage(id):
         # Join Group
         await client(JoinChannelRequest(group))
 
-        bot.send_message(id, 'Joined Succesfully')
+        bot.send_message(id, f'Joined {group.title} Group Succesfully!')
+
         ## Get All the users from the target group
         members = await client.get_participants(group)
 
@@ -110,6 +113,7 @@ async def sendMessage(id):
                         register.close()
 
                         bot.send_message(id, f"Sent to {user.username}")
+                        
                     except Exception as e:
                         print(f"Warning ! {e}")
                         sleep(60)
