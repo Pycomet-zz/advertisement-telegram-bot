@@ -17,12 +17,15 @@ idlist = list(csv.reader(Userfile))
 registeredusers = [n[0] for n in idlist]
 
 # Starting client session
-client = TelegramClient('session', api_id=API_ID, api_hash=API_HASH).start()
+client = TelegramClient(
+    StringSession(SESSION),
+    api_id=API_ID,
+    api_hash=API_HASH
+    ).start()
 
 # Starting Bot
 bot = telebot.TeleBot(token=TOKEN)
 print("Ready")
-
 
 @bot.message_handler(commands=['start'])
 def targetGroup(msg):

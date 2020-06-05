@@ -2,3 +2,4 @@
 env
 
 Users.txt
+__pycache__
