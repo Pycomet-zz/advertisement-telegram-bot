@@ -3,17 +3,9 @@
 # main purpose is to first join specified telegram group
 # and send custom messages to all their members
 
-# Importing necessary libraries
-from telethon import TelegramClient, events, sync
-import telebot
-from time import sleep
-from telethon.tl.functions.channels import JoinChannelRequest
-import random
-import csv
+from config import *
 
-# Defining the needed variables
-api_id = '683428'
-api_hash = '967b28d111f82b906b6f28da1ff04411'
+
 customMsg = ''
 targetGrp = ''
 user = ''
@@ -25,11 +17,12 @@ idlist = list(csv.reader(Userfile))
 registeredusers = [n[0] for n in idlist]
 
 # Starting client session
-client = TelegramClient('session', api_id=api_id, api_hash=api_hash).start()
+client = TelegramClient('session', api_id=API_ID, api_hash=API_HASH).start()
 
 # Starting Bot
-bot = telebot.TeleBot(token='1094295882:AAEF0PwOQKL88K6L5zslnpxKxWCGnfd0s3Q')
+bot = telebot.TeleBot(token=TOKEN)
 print("Ready")
+
 
 @bot.message_handler(commands=['start'])
 def targetGroup(msg):

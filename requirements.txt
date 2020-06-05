@@ -1,2 +1,13 @@
-telethon
-pyTelegramBotAPI
+certifi==2020.4.5.1
+chardet==3.0.4
+idna==2.9
+pkg-resources==0.0.0
+pyaes==1.6.1
+pyasn1==0.4.8
+pyTelegramBotAPI==3.7.1
+python-decouple==3.3
+requests==2.23.0
+rsa==4.0
+six==1.15.0
+Telethon==1.14.0
+urllib3==1.25.9
