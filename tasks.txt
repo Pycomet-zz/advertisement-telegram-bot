@@ -1,0 +1,4 @@
+- Self Destruction of Messages
+
+- Retrieve & registered groups already sent to
+

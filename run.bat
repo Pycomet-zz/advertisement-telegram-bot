@@ -1,1 +1,1 @@
-python spam.py
+python main.py

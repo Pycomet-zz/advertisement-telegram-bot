@@ -17,3 +17,13 @@ TOKEN = config("TOKEN")
 
 SESSION = config("SESSION")
 
+
+# Starting client session
+client = TelegramClient(
+    StringSession(SESSION),
+    api_id=API_ID,
+    api_hash=API_HASH
+    ).start()
+
+# Starting Bot
+bot = telebot.TeleBot(token=TOKEN)
