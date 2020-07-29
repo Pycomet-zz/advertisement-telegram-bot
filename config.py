@@ -1,5 +1,6 @@
 # Importing necessary libraries
 import os
+from flask import Flask, request
 from telethon import TelegramClient, events, sync
 import telebot
 from time import sleep
@@ -17,6 +18,7 @@ TOKEN = config("TOKEN")
 
 SESSION = config("SESSION")
 
+app = Flask(__name__)
 
 # Starting client session
 client = TelegramClient(
