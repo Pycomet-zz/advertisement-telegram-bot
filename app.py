@@ -9,6 +9,7 @@ from config import *
 customMsg = ''
 targetGrp = ''
 user = ''
+index = 1
 admins = [] # Administrators of the group
 
 # registered users on Users.txt
@@ -65,15 +66,25 @@ def send(msg):
     global customMsg
     customMsg = msg.text
 
-    client.loop.run_until_complete(sendMessage(user.id))
+    for session, session_user in zip(SESSIONS, SESSION_USERS):
+    
+        loop = asyncio.new_event_loop()
+
+        client = TelegramClient(
+            StringSession(session),
+            API_ID,
+            API_HASH,
+            loop = loop
+        ).start(bot_token=TOKEN)
+
+        client.loop.run_until_complete(sendMessage(user.id, session_user, client))
 
 
-async def sendMessage(id):
+async def sendMessage(id, session_user, client):
     """Send The Custom Message To A Target Group"""
-       
 
-    bot.send_message(id, "Sending Messages.....")
-
+    global index
+    bot.send_message(id, f"{session_user} Sending Messages.....")
 
     try:
         group = await client.get_entity(targetGrp)
@@ -81,20 +92,27 @@ async def sendMessage(id):
         # Join Group
         await client(JoinChannelRequest(group))
 
-        bot.send_message(id, f'Joined {group.title} Group Succesfully!')
+        bot.send_message(id, f'{session_user} Joined {group.title} Group Successfully!')
 
         ## Get All the users from the target group
         members = await client.get_participants(group)
 
         ## Send message to the members individually
-        for user in members[1:]:
-
+        for user in members[index:]:
+            
             if user.bot == False:
 
                 if user.id not in admins and str(user.id) not in registeredusers:
 
                     try:
-                        await client.send_message(user.id, customMsg)
+                        message = await client.send_message(user.id, customMsg)
+
+                        #Add scheduler job
+                        time = datetime.now() + timedelta(seconds=20)
+
+                        scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'to_user{index}', args=(client, user, message, f"to_user{index}"))
+                        print("i'm here")
+                        sleep(100)
 
                         # Writing To Db File
                         register = open("Users.txt", "a", newline="\n")
@@ -106,15 +124,29 @@ async def sendMessage(id):
                     except Exception as e:
                         print(f"Warning ! {e}")
                         sleep(60)
-                        pass
 
-                    sleep(random.randrange(60,120))
+            #Setting the state
+            index += 1
 
     except Exception as e:
         print(e)
         bot.send_message(id, "Error in your input! Try again with requested valid data")
 
-   
+
+
+def delete_message(client, user, message, job_id):
+    "Scheduler function that deletes a sent message after two hours"
+    loop = asyncio.new_event_loop()
+
+    loop.run_until_complete(delete(client, message))
+    print("deleted")
+
+
+async def delete(client, message):
+    "Delete Message"
+    user = await client.get_me()
+    await client.delete_messages(user, message.id)
+
 
 # bot.polling(none_stop=True)
 

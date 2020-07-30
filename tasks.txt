@@ -2,3 +2,5 @@
 
 - Retrieve & registered groups already sent to
 
+- Differentiate between channel and groups
+
