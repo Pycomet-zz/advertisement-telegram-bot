@@ -79,6 +79,14 @@ def send(msg):
 
         client.loop.run_until_complete(sendMessage(user.id, session_user, client))
 
+        messages = message_db.find()
+
+        msg_ids = [messages[i]['message_id'] for i in range(messages.count()) if messages[i]['sender'] == str(session_user)]
+
+        client.loop.run_until_complete(deleteMessages(msg_ids, client))
+
+
+
 
 async def sendMessage(id, session_user, client):
     """Send The Custom Message To A Target Group"""
@@ -88,7 +96,6 @@ async def sendMessage(id, session_user, client):
 
     try:
         group = await client.get_entity(targetGrp)
-
         # Join Group
         await client(JoinChannelRequest(group))
 
@@ -99,20 +106,24 @@ async def sendMessage(id, session_user, client):
 
         ## Send message to the members individually
         for user in members[index:]:
-            
             if user.bot == False:
-
                 if user.id not in admins and str(user.id) not in registeredusers:
 
                     try:
                         message = await client.send_message(user.id, customMsg)
 
                         #Add scheduler job
-                        time = datetime.now() + timedelta(seconds=20)
+                        # time = datetime.now() + timedelta(seconds=20)
 
-                        scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'to_user{index}', args=(client, user, message, f"to_user{index}"))
-                        print("i'm here")
-                        sleep(100)
+                        # scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'to_user{index}', args=(client, user, message, f"to_user{index}"))
+                        
+                        post_data = {
+                            'sender': session_user,
+                            'message_id': message.id,
+                            'sent_date': datetime.now(),
+                        }
+                        result = message_db.insert_one(post_data)
+                        print('One post: {0}'.format(result.inserted_id))
 
                         # Writing To Db File
                         register = open("Users.txt", "a", newline="\n")
@@ -134,18 +145,13 @@ async def sendMessage(id, session_user, client):
 
 
 
-def delete_message(client, user, message, job_id):
-    "Scheduler function that deletes a sent message after two hours"
-    loop = asyncio.new_event_loop()
+async def deleteMessages(ids, client):
+    "Deletes messsages recorded to be sent"
 
-    loop.run_until_complete(delete(client, message))
-    print("deleted")
+    await client.delete_messages(chat=None, message_ids=list(ids))
 
-
-async def delete(client, message):
-    "Delete Message"
-    user = await client.get_me()
-    await client.delete_messages(user, message.id)
+    [message_db.delete_one(payload) for payload in messages]
+    return client.disconnect()
 
 
 # bot.polling(none_stop=True)

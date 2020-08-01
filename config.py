@@ -28,6 +28,9 @@ database_client = MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um
 db = database_client.tool_database
 sessions = db.sessions.find()
 
+message_db = database_client.test
+
+
 SESSIONS = [sessions[i]['SessionString'] for i in range(sessions.count())]
 SESSION_USERS = [sessions[i]['first_name'] for i in range(sessions.count())]
 
