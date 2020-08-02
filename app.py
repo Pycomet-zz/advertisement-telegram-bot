@@ -9,6 +9,9 @@ from config import *
 customMsg = ''
 targetGrp = ''
 user = ''
+
+## State variable
+warning = 0
 index = 1
 admins = [] # Administrators of the group
 
@@ -18,13 +21,9 @@ idlist = list(csv.reader(Userfile))
 registeredusers = [n[0] for n in idlist]
 
 
-
-print("Ready")
-
 @bot.message_handler(commands=['start'])
 def targetGroup(msg):
     """Request The Target Group From User"""
-
     global user
 
     user = msg.from_user
@@ -79,12 +78,13 @@ def send(msg):
 
         client.loop.run_until_complete(sendMessage(user.id, session_user, client))
 
-        messages = message_db.find()
+        messages = message_db.messages.find()
 
         msg_ids = [messages[i]['message_id'] for i in range(messages.count()) if messages[i]['sender'] == str(session_user)]
 
-        client.loop.run_until_complete(deleteMessages(msg_ids, client))
-
+        #Add scheduler job
+        time = datetime.now() + timedelta(hours=2)
+        scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
 
 
 
@@ -92,6 +92,7 @@ async def sendMessage(id, session_user, client):
     """Send The Custom Message To A Target Group"""
 
     global index
+    global warning
     bot.send_message(id, f"{session_user} Sending Messages.....")
 
     try:
@@ -105,35 +106,32 @@ async def sendMessage(id, session_user, client):
         members = await client.get_participants(group)
 
         ## Send message to the members individually
-        for user in members[index:]:
+        for user in members[index:20]:
             if user.bot == False:
                 if user.id not in admins and str(user.id) not in registeredusers:
 
                     try:
                         message = await client.send_message(user.id, customMsg)
 
-                        #Add scheduler job
-                        # time = datetime.now() + timedelta(seconds=20)
-
-                        # scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'to_user{index}', args=(client, user, message, f"to_user{index}"))
-                        
                         post_data = {
                             'sender': session_user,
                             'message_id': message.id,
                             'sent_date': datetime.now(),
                         }
-                        result = message_db.insert_one(post_data)
+                        result = message_db.messages.insert_one(post_data)
                         print('One post: {0}'.format(result.inserted_id))
-
-                        # Writing To Db File
-                        register = open("Users.txt", "a", newline="\n")
-                        register.write(f"{user.id}\n")
-                        register.close()
 
                         bot.send_message(id, f"Sent to {user.username}")
                         
                     except Exception as e:
-                        print(f"Warning ! {e}")
+                        warning += 1
+
+                        if warning >= 5:
+                            bot.send_message(id, f"Failed to send anymore message with {user.username}")
+                            warning = 0
+                            return None
+                        else:
+                            print(f"Warning ! {e}")
                         sleep(60)
 
             #Setting the state
@@ -145,16 +143,19 @@ async def sendMessage(id, session_user, client):
 
 
 
-async def deleteMessages(ids, client):
+def delete(msg_ids, client, messages):
+    "Function To Activate The Scheduler For the Deleting Of Sent Messages"
+    client.loop.run_until_complete(deleteMessages(msg_ids, client, messages))
+
+
+async def deleteMessages(ids, client, messages):
     "Deletes messsages recorded to be sent"
 
-    await client.delete_messages(chat=None, message_ids=list(ids))
+    await client.delete_messages(entity=None, message_ids=list(ids))
 
-    [message_db.delete_one(payload) for payload in messages]
-    return client.disconnect()
+    [message_db.messages.delete_one(payload) for payload in messages]
+    return await client.disconnect()
 
 
-# bot.polling(none_stop=True)
 
-# while True:
-#     pass
+

@@ -5,3 +5,4 @@ app.yaml
 
 Users.txt
 __pycache__
+.vscode

@@ -14,22 +14,20 @@ from datetime import datetime, timedelta
 from decouple import config
 from apscheduler.schedulers.background import BackgroundScheduler
 
+DEBUG = True
 
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-
 DB_USER = config("DB_USER")
 DB_PASS = config("DB_PASS")
-
 
 # Database Tool
 database_client = MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um.mongodb.net/?retryWrites=true&w=majority")
 db = database_client.tool_database
 sessions = db.sessions.find()
 
-message_db = database_client.test
-
+message_db = database_client.advert_database
 
 SESSIONS = [sessions[i]['SessionString'] for i in range(sessions.count())]
 SESSION_USERS = [sessions[i]['first_name'] for i in range(sessions.count())]
