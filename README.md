@@ -11,7 +11,7 @@
 
 ### 🏠 Project Biography
 
-The importance of marketing has always been inevitable to neglect for growing businesses seeking to reach more of it's target users. This telegram application seeks to meet the goal of share vital content to members of specified target groups/channels (excluding the registered administrators of that group). In addition to that, each of the sent messages are recorded and by default, deleted aftered two(2) hours to protect which ever account the user uses, from ban.
+The importance of marketing has always been inevitable to neglect for growing businesses seeking to reach more of it's target users. This telegram application seeks to meet the goal of share vital content to members of specified target groups/channels (excluding the registered administrators of that group). In addition to that, each of the sent messages are recorded and by default, deleted after two(2) hours to protect which ever account the user uses, from ban.
 
 From the perspective of a user trying to market his/her services or products, this bot would go a long way without you having to worry about engaging with users individually. And when a user finds the content interesting, you receive a feedback which gives the user a call to action right away with their first customer.
 
