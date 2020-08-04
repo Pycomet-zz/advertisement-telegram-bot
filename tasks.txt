@@ -1,6 +1,22 @@
-- Self Destruction of Messages
+- Self Destruction of Messages **
+
+- Delete scheduled self destructs if there's a response
 
 - Retrieve & registered groups already sent to
 
 - Differentiate between channel and groups
 
+
+--- MAKE THIS BOT A SERVICE - A service bot that connects users with their customers 
+
+    - Register user with instance
+
+    - Create user dashboard for ads sent
+        - Promotions
+        - Niche
+        - Country
+        
+
+
+
+TARGET AUDIENCE IS EXPLODING TELEGRAM CHANNELS THAT NEED MORE AUDIENCES TO LISTEN
