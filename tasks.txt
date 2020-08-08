@@ -23,4 +23,15 @@
     | 
 
 
+
+
+USER SCHEMA 
+- user_id
+- session_string
+- sent_messages
+- is_authenticated
+- days_used
+
+
 TARGET AUDIENCE IS EXPLODING TELEGRAM CHANNELS THAT NEED MORE AUDIENCES TO LISTEN
+
