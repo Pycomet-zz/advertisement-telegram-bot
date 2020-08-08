@@ -1,6 +1,8 @@
 # Importing necessary libraries
 import os
 from flask import Flask, request
+from flask_restful import Api, Resource
+
 from pymongo import MongoClient
 from telethon import TelegramClient, events, sync
 import telebot
@@ -14,7 +16,7 @@ from datetime import datetime, timedelta
 from decouple import config
 from apscheduler.schedulers.background import BackgroundScheduler
 
-DEBUG = True
+DEBUG = False
 
 scheduler = BackgroundScheduler()
 scheduler.start()
@@ -40,6 +42,7 @@ TOKEN = config("TOKEN")
 # SESSION = config("SESSION")
 
 app = Flask(__name__)
+api = Api(app)
 
 # Starting Bot
 bot = telebot.TeleBot(token=TOKEN)

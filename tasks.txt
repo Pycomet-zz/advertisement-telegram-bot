@@ -18,5 +18,9 @@
         
 
 
+- API RESOURCES
+    | user (get, post, delete)
+    | 
+
 
 TARGET AUDIENCE IS EXPLODING TELEGRAM CHANNELS THAT NEED MORE AUDIENCES TO LISTEN
