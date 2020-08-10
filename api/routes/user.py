@@ -6,7 +6,8 @@ users_db = api_db.users
 class UserList(Resource):
 
     def get(self):
-        result = users_db.find()
+        data = users_db.find()
+        result = [i for i in data]
         return make_response(result), 200
 
     def post(self):
