@@ -22,6 +22,7 @@ DEBUG = False
 scheduler = BackgroundScheduler()
 scheduler.start()
 
+app = Flask(__name__)
 
 API_ID = config("API_ID")
 API_HASH = config("API_HASH")
@@ -30,12 +31,9 @@ TOKEN = config("TOKEN")
 
 DB_USER = config("DB_USER")
 DB_PASS = config("DB_PASS")
-# # Database Tool
-# database_client = MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um.mongodb.net/?retryWrites=true&w=majority")
 
-app = Flask(__name__)
-# app.config["MONGO_URI"] = f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um.mongodb.net/?retryWrites=true&w=majority"
-database_client = PyMongo(app, uri=f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um.mongodb.net/?retryWrites=true&w=majority")
+# Database Tool
+database_client = MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um.mongodb.net/?retryWrites=true&w=majority")
 
 db = database_client.tool_database
 sessions = db.sessions.find()
