@@ -1,6 +1,6 @@
 
 from app import *
-from resources import User
+from api import api_bp
 
 @app.route('/' + TOKEN, methods=['POST', 'GET'])
 def getMessage():
@@ -15,11 +15,12 @@ def webhook():
     return "<h1>Advert Bot is Active!!</h1>", 200
 
 
-api.add_resource(User, "/testapi")
+
 
 if __name__ == "__main__":
 
     if DEBUG is False:
+        app.register_blueprint(api_bp)
         app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
     else:
         print("Running.....")

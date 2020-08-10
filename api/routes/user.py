@@ -1,11 +1,11 @@
 # User Resource
 from config import *
 
-class User(Resource):
+users_db = api_db.users
+
+class UserList(Resource):
 
     def get(self):
-
-        
         return "It works Bitch!"
 
     def post(self):
