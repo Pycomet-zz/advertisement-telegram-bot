@@ -7,12 +7,12 @@ class UserList(Resource):
 
     def get(self):
         result = users_db.find()
-        return make_response(result)
+        return make_response(result), 200
 
     def post(self):
         payload = request.get_json()
         result = users_db.insert_one(payload)
-        return f"New user added - {result.inserted_id}"
+        return f"New user added - {result.inserted_id}", 200
 
 
 class User(Resource):
@@ -22,9 +22,9 @@ class User(Resource):
         result = users_db.find_one(criteria)
 
         if result == None:
-            return "No User Found!"
+            return "No User Found!", 405
         else:
-            return make_response(result)
+            return make_response(result), 200
 
     def put(self, user_id):
         criteria = {'user_id': user_id}
@@ -35,10 +35,10 @@ class User(Resource):
             new_update,
             upsert=True
         ).modified_count
-        return f"{result} User Updated"
+        return f"{result} User Updated", 200
 
     def delete(self, user_id):
         criteria = {'user_id': user_id}
 
         result = users_db.delete_one(criteria).deleted_count
-        return f"{result} User Deleted"
+        return f"{result} User Deleted", 200
