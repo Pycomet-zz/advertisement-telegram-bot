@@ -4,6 +4,8 @@ from config import *
 class User(Resource):
 
     def get(self):
+
+        
         return "It works Bitch!"
 
     def post(self):
