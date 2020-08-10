@@ -1,6 +1,6 @@
 # Importing necessary libraries
 import os
-from flask import Flask, request
+from flask import Flask, request, make_response
 from flask_restful import Api, Resource
 
 from pymongo import MongoClient

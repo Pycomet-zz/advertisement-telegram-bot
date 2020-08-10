@@ -1,5 +1,4 @@
-import os
-from flask_restful import Resource
+from config import *
 
 class Beat(Resource):
     def get(self):

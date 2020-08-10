@@ -1,5 +1,5 @@
 from flask import Blueprint
-from .routes import UserList
+from .routes import UserList, User
 
 ### API configurations
 api_bp = Blueprint('api', __name__)
