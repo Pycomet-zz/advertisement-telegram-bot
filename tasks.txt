@@ -6,9 +6,18 @@
 
 - Differentiate between channel and groups
 
+-----MAIN MENU
+- Register To Advert Bot (Get Free 100 Coins)
+    - Find customers
+    - Check Status
+    - Ad History(Dashboard)
+    - Purchase more coins
+
+
 
 --- MAKE THIS BOT A SERVICE - A service bot that connects users with their customers 
 
+    - Number of user coins represent the available messages to send
     - Register user with instance
 
     - Create user dashboard for ads sent
@@ -18,17 +27,10 @@
         
 
 
-- API RESOURCES
-    | user (get, post, delete)
-    | 
-
-
-
-
 USER SCHEMA 
 - user_id
 - session_string
-- sent_messages
+- no of coins
 - is_authenticated
 - days_used
 

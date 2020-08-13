@@ -1,5 +1,5 @@
 
-from app import *
+from handlers import *
 from api import api_bp
 
 @app.route('/' + TOKEN, methods=['POST', 'GET'])
