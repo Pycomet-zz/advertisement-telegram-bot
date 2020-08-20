@@ -10,14 +10,16 @@ import telebot
 import asyncio
 from time import sleep
 from telethon.tl.functions.channels import JoinChannelRequest
+from telethon.tl.custom import Button
 from telethon.sessions import StringSession
 import random
 import csv
 from datetime import datetime, timedelta
 from decouple import config
 from apscheduler.schedulers.background import BackgroundScheduler
+import requests
 
-DEBUG = False
+DEBUG = True
 
 scheduler = BackgroundScheduler()
 scheduler.start()

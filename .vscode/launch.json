@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Advert Bot",
             "type": "python",
             "request": "launch",
             "program": "main.py",

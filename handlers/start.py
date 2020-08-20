@@ -5,9 +5,12 @@
 
 from config import *
 
-
 customMsg = ''
 targetGrp = ''
+
+imageAttached = False
+fileName = ""
+
 user = ''
 
 ## State variable
@@ -63,7 +66,15 @@ def send(msg):
     """Save and start sending message"""
 
     global customMsg
-    customMsg = msg.text
+    global imageAttached
+
+    if msg.photo != None:
+        customMsg = msg.caption
+        imageAttached = True
+        download_attachment(msg.photo)
+    else:
+        customMsg = msg.text
+        imageAttached = False
 
     for session, session_user in zip(SESSIONS, SESSION_USERS):
     
@@ -82,10 +93,28 @@ def send(msg):
 
         msg_ids = [messages[i]['message_id'] for i in range(messages.count()) if messages[i]['sender'] == str(session_user)]
 
+        imageAttached = False
+
         #Add scheduler job
-        time = datetime.now() + timedelta(hours=2)
+        time = datetime.now() + timedelta(minutes=2)
         scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
 
+
+
+def download_attachment(img):
+    "Downloads the Attached Image File To Source Directory So It Can Be Reused"
+    
+    global fileName
+    file_id = img[0].file_id
+
+    file_url = bot.get_file_url(file_id)
+
+    fileName = file_url.split("/")[-1]
+
+    #Download image
+    image = requests.get(file_url, allow_redirects=True)
+    open(f"images/{fileName}", "wb").write(image.content)
+    return
 
 
 async def sendMessage(id, session_user, client):
@@ -111,7 +140,26 @@ async def sendMessage(id, session_user, client):
                 if user.id not in admins and str(user.id) not in registeredusers:
 
                     try:
-                        message = await client.send_message(user.id, customMsg)
+                        if imageAttached == False:
+                            message = await client.send_message(
+                                user.id,
+                                customMsg,
+                                buttons=[
+                                    Button.inline("Click me", b'well'),
+                                    Button.url('Join Group', 'https://t.me/globaltradegroupvip')
+                                    ]
+                                )
+                        # message = await client.send_messages(user.id, [raw_msg.message_id], id)
+                        else:
+                            message = await client.send_message(
+                                user.id,
+                                customMsg,
+                                file=f'images/{fileName}',
+                                buttons=[
+                                    Button.inline("Click me", b'well'),
+                                    Button.url('Join Group', 'https://t.me/globaltradegroupvip')
+                                    ]
+                                )
 
                         post_data = {
                             'sender': session_user,
@@ -142,7 +190,6 @@ async def sendMessage(id, session_user, client):
         bot.send_message(id, "Error in your input! Try again with requested valid data")
 
 
-
 def delete(msg_ids, client, messages):
     "Function To Activate The Scheduler For the Deleting Of Sent Messages"
     client.loop.run_until_complete(deleteMessages(msg_ids, client, messages))
@@ -155,7 +202,3 @@ async def deleteMessages(ids, client, messages):
 
     [message_db.messages.delete_one(payload) for payload in messages]
     return await client.disconnect()
-
-
-
-
