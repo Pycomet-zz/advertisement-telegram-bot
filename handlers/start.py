@@ -68,7 +68,7 @@ def send(msg):
     global customMsg
     global imageAttached
 
-    if msg.photo != None:
+    if msg.content_type != 'text':
         customMsg = msg.caption
         imageAttached = True
         download_attachment(msg.photo)
