@@ -11,7 +11,6 @@ idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
-pkg-resources==0.0.0
 pyaes==1.6.1
 pyasn1==0.4.8
 pymongo==3.10.1
