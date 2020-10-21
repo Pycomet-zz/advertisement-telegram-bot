@@ -1,7 +1,5 @@
 runtime: python38
 
-
-
 env_variables:
   API_ID: "683428"
   API_HASH: "967b28d111f82b906b6f28da1ff04411"
