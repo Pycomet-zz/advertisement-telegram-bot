@@ -8,4 +8,4 @@ env_variables:
   TOKEN: "1094295882:AAEF0PwOQKL88K6L5zslnpxKxWCGnfd0s3Q"
   DB_USER: "hunters_user"
   DB_PASS: "hunters"
-  WEBHOOK_URL: "https://new-project-265216.df.r.appspot.com/"
+  WEBHOOK_URL: "https://weblulue-app.df.r.appspot.com/"

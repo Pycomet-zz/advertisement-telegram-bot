@@ -135,7 +135,7 @@ async def sendMessage(id, session_user, client):
         members = await client.get_participants(group)
 
         ## Send message to the members individually
-        for user in members[index:20]:
+        for user in members[index::]:
             if user.bot == False:
                 if user.id not in admins and str(user.id) not in registeredusers:
 
