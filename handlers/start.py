@@ -16,7 +16,7 @@ user = ''
 
 ## State variable
 warning = 0
-index = 1
+index = 5
 admins = [] # Administrators of the group
 
 # registered users on Users.txt
@@ -259,7 +259,7 @@ Your campaign is live, active with <b>{session_user}</b>
         members = await client.get_participants(group)
 
         ## Send message to the members individually
-        for user in members[index:5]:
+        for user in members[index::]:
             if user.bot == False:
                 if user.id not in admins and str(user.id) not in registeredusers:
 
