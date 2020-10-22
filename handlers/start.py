@@ -267,22 +267,14 @@ Your campaign is live, active with <b>{session_user}</b>
                         if imageAttached == False:
                             message = await client.send_message(
                                 user.id,
-                                customMsg,
-                                buttons=[
-                                    Button.inline("Click me", b'well'),
-                                    Button.url('Join Group', 'https://t.me/globaltradegroupvip')
-                                    ]
+                                customMsg
                                 )
                         # message = await client.send_messages(user.id, [raw_msg.message_id], id)
                         else:
                             message = await client.send_message(
                                 user.id,
                                 customMsg,
-                                file=f'images/{fileName}',
-                                buttons=[
-                                    Button.inline("Click me", b'well'),
-                                    Button.url('Join Group', 'https://t.me/globaltradegroupvip')
-                                    ]
+                                file=f'images/{fileName}'
                                 )
 
                         post_data = {
