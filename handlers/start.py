@@ -190,7 +190,7 @@ Administrators excluded -> {len(admins)}
         imageAttached = False
 
         #Add scheduler job
-        time = datetime.now() + timedelta(minutes=2)
+        time = datetime.now() + timedelta(minutes=30)
         scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
 
     bot.edit_message_text(
