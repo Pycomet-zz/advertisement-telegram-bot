@@ -34,6 +34,8 @@ TOKEN = config("TOKEN")
 DB_USER = config("DB_USER")
 DB_PASS = config("DB_PASS")
 
+WEBHOOK_URL = config("WEBHOOK_URL")
+
 # Database Tool
 database_client = MongoClient(f"mongodb+srv://{DB_USER}:{DB_PASS}@cluster0-fj4um.mongodb.net/?retryWrites=true&w=majority")
 
