@@ -16,7 +16,7 @@ user = ''
 
 ## State variable
 warning = 0
-index = 5
+index = 15
 admins = [] # Administrators of the group
 
 # registered users on Users.txt
@@ -191,7 +191,7 @@ Administrators excluded -> {len(admins)}
 
         #Add scheduler job
         time = datetime.now() + timedelta(minutes=30)
-        scheduler.add_job(delete_message, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
+        scheduler.add_job(delete, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
 
     bot.edit_message_text(
         chat_id = user.id,
@@ -239,6 +239,9 @@ async def sendMessage(id, session_user, client):
 🏳️ <b>CAMPAIGN ACTIVE</b>
 Your campaign is live, active with <b>{session_user}</b>
 
+Target Audience -> {targetGrp}
+Administrators excluded -> {len(admins)}
+
 <b>Sent</b> -> {sent}
 <b>Views</b> -> {views}
 <b>Clicks</b> -> {clicks}   
@@ -247,16 +250,16 @@ Your campaign is live, active with <b>{session_user}</b>
     )
 
     try:
-        group = await client.get_entity(targetGrp)
+        # group = await client.get_entity(targetGrp)
 
-        try:
-            # Join Group
-            await client(JoinChannelRequest(group))
-        except Exception as e:
-            pass
+        # try:
+        #     # Join Group
+        #     await client(JoinChannelRequest(group))
+        # except Exception as e:
+        #     pass
 
         ## Get All the users from the target group
-        members = await client.get_participants(group)
+        members = await client.get_participants(targetGrp)
 
         ## Send message to the members individually
         for user in members[index::]:
@@ -295,7 +298,7 @@ Your campaign is live, active with <b>{session_user}</b>
                             return None
                         else:
                             print(f"Warning ! {e}")
-                        sleep(60)
+                        sleep(5)
 
             #Setting the state
             index += 1
@@ -305,6 +308,9 @@ Your campaign is live, active with <b>{session_user}</b>
                 text = f"""
 🏳️ <b>CAMPAIGN ACTIVE</b>
 ---------------------------
+Target Audience -> {targetGrp}
+Administrators excluded -> {len(admins)}
+
 <b>Sent</b> -> {sent}
 <b>Views</b> -> {views}
 <b>Clicks</b> -> {clicks}
@@ -317,10 +323,14 @@ Your campaign is live, active with <b>{session_user}</b>
         bot.edit_message_text(
             chat_id = id,
             message_id = campaignId,
-            text = """
+            text = f"""
 🚩 <b>CAMPAGIN INACTIVE</b>
 ---------------------------
 Error in your input! Please verify the group link provided and try creating the campaign again
+
+<b>Sent</b> -> {sent}
+<b>Views</b> -> {views}
+<b>Clicks</b> -> {clicks}
             """,
             parse_mode = "html",
         )

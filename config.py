@@ -20,7 +20,7 @@ from decouple import config
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 
-DEBUG = False
+DEBUG = True
 
 scheduler = BackgroundScheduler()
 scheduler.start()
