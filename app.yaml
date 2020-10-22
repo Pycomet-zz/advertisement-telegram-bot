@@ -3,7 +3,7 @@ runtime: python38
 env_variables:
   API_ID: "683428"
   API_HASH: "967b28d111f82b906b6f28da1ff04411"
-  TOKEN: "1094295882:AAEF0PwOQKL88K6L5zslnpxKxWCGnfd0s3Q"
+  TOKEN: "1349826643:AAG4G6pwlkaey8BozH9CHakUZSge2dvNJAA"
   DB_USER: "hunters_user"
   DB_PASS: "hunters"
   WEBHOOK_URL: "https://weblulue-app.df.r.appspot.com/"

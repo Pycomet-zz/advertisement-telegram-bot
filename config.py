@@ -7,6 +7,7 @@ import json
 from pymongo import MongoClient
 from telethon import TelegramClient, events, sync
 import telebot
+from telebot import types
 import asyncio
 from time import sleep
 from telethon.tl.functions.channels import JoinChannelRequest
@@ -19,7 +20,7 @@ from decouple import config
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 
-DEBUG = False
+DEBUG = True
 
 scheduler = BackgroundScheduler()
 scheduler.start()
