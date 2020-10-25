@@ -170,28 +170,28 @@ Administrators excluded -> {len(admins)}
 
     bot.delete_message(msg.chat.id, msg.message_id)
 
-    for session, session_user in zip(SESSIONS, SESSION_USERS):
-    
-        loop = asyncio.new_event_loop()
+    # for session, session_user in zip(SESSIONS, SESSION_USERS):
 
-        client = TelegramClient(
-            StringSession(session),
-            API_ID,
-            API_HASH,
-            loop = loop
-        ).start(bot_token=TOKEN)
+    loop = asyncio.new_event_loop()
 
-        client.loop.run_until_complete(sendMessage(user.id, session_user, client))
+    client = TelegramClient(
+        StringSession(session),
+        API_ID,
+        API_HASH,
+        loop = loop
+    ).start(bot_token=TOKEN)
 
-        messages = message_db.messages.find()
+    client.loop.run_until_complete(sendMessage(user.id, session_user, client))
 
-        msg_ids = [messages[i]['message_id'] for i in range(messages.count()) if messages[i]['sender'] == str(session_user)]
+    messages = message_db.messages.find()
 
-        imageAttached = False
+    msg_ids = [messages[i]['message_id'] for i in range(messages.count()) if messages[i]['sender'] == str(session_user)]
 
-        #Add scheduler job
-        time = datetime.now() + timedelta(minutes=30)
-        scheduler.add_job(delete, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
+    imageAttached = False
+
+    #Add scheduler job
+    time = datetime.now() + timedelta(minutes=30)
+    scheduler.add_job(delete, trigger='date', run_date=time, id=f'by_{session_user}', args=(msg_ids, client, messages))
 
     bot.edit_message_text(
         chat_id = user.id,
@@ -264,7 +264,7 @@ Administrators excluded -> {len(admins)}
         ## Send message to the members individually
         for user in members[index::]:
             if user.bot == False:
-                if user.id not in admins and str(user.id) not in registeredusers:
+                if user.id in admins and str(user.id) not in registeredusers:
 
                     try:
                         if imageAttached == False:
