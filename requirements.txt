@@ -9,7 +9,7 @@ Flask-PyMongo==2.3.0
 Flask-RESTful==0.3.8
 idna==2.9
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 pyaes==1.6.1
 pyasn1==0.4.8
