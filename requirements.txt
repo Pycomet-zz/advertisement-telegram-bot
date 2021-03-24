@@ -19,7 +19,7 @@ python-decouple==3.3
 python-dotenv==0.14.0
 pytz==2020.1
 requests==2.23.0
-rsa==4.0
+rsa==4.1
 six==1.15.0
 Telethon==1.14.0
 tzlocal==2.1
